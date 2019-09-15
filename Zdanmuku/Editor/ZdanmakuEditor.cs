@@ -7,6 +7,9 @@ public class ZdanmakuEditor : Editor
 {
     [MenuItem("Tools/Zdanmaku/Zdanmaku Utility Panel")]
     public static void ShowZdanmakuWindow() { EditorWindow.GetWindow<ZdanmakuPanel>(); }
+
+    [MenuItem("Tools/Zdanmaku/Github")]
+    public static void JumpToGithub() { Application.OpenURL("https://github.com/DASTUDIO/Zdanmaku"); }
 }
 
 public class ZdanmakuPanel : EditorWindow

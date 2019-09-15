@@ -1,26 +1,29 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestDanmaku : MonoBehaviour
 {
-    private void Start()
+    void Start() { StartCoroutine(AddDanmaku()); }
+
+    IEnumerator AddDanmaku()
     {
         for (int i = 0; i < 500; i++)
         {
+            yield return new WaitForSeconds(0.5f);
             float f = Random.Range(3, 8);
-            Zdanmaku.Show(GetString(Random.Range(0, 6)), GetColor(Random.Range(0, 6)), Random.Range(0f, 0.6f), Random.Range(30, 70), f);
+            Zdanmaku.Show(GetString(Random.Range(0, 6)), GetColor(Random.Range(0, 6)), Random.Range(0f, 0.89f), Random.Range(30, 70), f);
         }
     }
 
-    private void OnGUI()
-    {
-        if (GUI.Button(new Rect(0,0,200,100),""))
-        {
-            float f = Random.Range(3, 8);
-            Zdanmaku.Show(GetString(Random.Range(0, 6)), GetColor(Random.Range(0, 6)), Random.Range(0f, 0.6f), Random.Range(30, 70), f);
-        }
-    }
+    //private void OnGUI()
+    //{
+    //    if (GUI.Button(new Rect(0,0,200,100),"Add a Danmaku"))
+    //    {
+    //        float f = Random.Range(3, 8);
+
+    //        Zdanmaku.Show(GetString(Random.Range(0, 6)), GetColor(Random.Range(0, 6)), Random.Range(0f, 0.99f), Random.Range(30, 70), f);
+    //    }
+    //}
 
     string GetString(int i)
     {
@@ -63,13 +66,13 @@ public class TestDanmaku : MonoBehaviour
                 return Color.white;
 
             case 3:
-                return Color.black;
+                return Color.red;
 
             case 4:
                 return Color.yellow;
 
             case 5:
-                return Color.black;
+                return Color.green;
                 
             default:
                 return Color.magenta;
