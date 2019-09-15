@@ -12,6 +12,6 @@ Zdanmaku.Show(Content,Color,Offset,Size,Duration)
 ```
 ![preview](https://raw.githubusercontent.com/DASTUDIO/Zdanmaku/master/img/1.jpg)
 
-![preview](https://raw.githubusercontent.com/DASTUDIO/Zdanmaku/master/img/2.jpg)
+![preview](https://raw.githubusercontent.com/DASTUDIO/Zdanmaku/master/img/20.jpg)
 
 ![preview](https://raw.githubusercontent.com/DASTUDIO/Zdanmaku/master/img/1.png)
