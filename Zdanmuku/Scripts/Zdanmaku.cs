@@ -32,10 +32,12 @@ public class Zdanmaku : MonoBehaviour
     [HideInInspector]
     public Font font;                            // 弹幕字体
 
+    [HideInInspector]
+    public float alpha = 1f;                     // 弹幕透明度
 
     public enum Mode { FullContent = 0, Realtime = 1, }
 
-    public enum Direction { Left =0, Right=1, Up=2, Down=3 }
+    public enum Direction { Left = 0, Right = 1, Up = 2, Down = 3 }
 
 
     class _Danmaku { public int _id; public TextPro _text; public string _content; public Color _color; public int _size; public float _duration; public float _startOffset; }
@@ -45,7 +47,7 @@ public class Zdanmaku : MonoBehaviour
 
     static Zdanmaku z; static bool isInit;
 
-    int count; int currentDisplay; Canvas c; 
+    int count; int currentDisplay; Canvas c;
 
     /// <summary>
     /// 显示一条弹幕
@@ -55,7 +57,7 @@ public class Zdanmaku : MonoBehaviour
     /// <param name="start_offset">距离零点的位置 0～1之间 根据方向自适配</param>
     /// <param name="size">大小</param>
     /// <param name="duration">屏幕上停留的时间（飘过去的总时长）</param>
-    public static void Show(string content, Color color , float start_offset = 0, int size = 15, float duration = 1f)
+    public static void Show(string content, Color color, float start_offset = 0, int size = 15, float duration = 1f)
     {
         if (!isInit) { isInit = init(); }
 
@@ -64,20 +66,33 @@ public class Zdanmaku : MonoBehaviour
 
         if (z.dmPool.Count > z.maxDisplay && z.mode == Mode.Realtime)
             return;
-        
+
         _Danmaku dm = _DanmukuPool.New(z.count, content, color, start_offset, size, duration);
 
         if (dm != null)
             z.dmPool.Enqueue(dm);
     }
 
-    float tmp_time;
+    private void Awake() { z = this; }
+
+    bool isPause; 
+
+    public static void Pause() { z.isPause = true; }
+
+    public static void Continue() { z.isPause = false; }
+
+    public static float Alpha { get { return z.alpha; } set { z.alpha = value; } }
+
+    float tmp_time; 
 
     Vector2 v01 = new Vector2(0, 1);
     Vector2 v10 = new Vector2(1, 0);
 
     void Update()
     {
+        if (isPause)
+            return;
+
         if (Time.time < tmp_time)
             return;
 
@@ -94,7 +109,7 @@ public class Zdanmaku : MonoBehaviour
             dm._text.supportRichText = false;
             dm._text.font = font;
             dm._text.text = dm._content;
-            dm._text.color = dm._color;
+            dm._text.color = new Color(dm._color.r, dm._color.g, dm._color.b, z.alpha);
             dm._text.fontSize = dm._size;
             dm._text.rectTransform.sizeDelta *= (dm._size / 14);
 
@@ -163,17 +178,19 @@ public class Zdanmaku : MonoBehaviour
 
     IEnumerator Move(_Danmaku dm, Vector2 delta, float time)
     {
+        
         for (int i = 0; i < step; i++)
         {
-            dm._text.rectTransform.anchoredPosition += delta;
+            if (isPause) { i--; } else { dm._text.rectTransform.anchoredPosition += delta; }
             yield return new WaitForSeconds(time);
         }
+
         dm._text.rectTransform.sizeDelta /= (dm._size / 14);
         dm._text.rectTransform.sizeDelta = new Vector2(dm._text.rectTransform.sizeDelta.x / dm._content.Length / dm._size / rate, dm._text.rectTransform.sizeDelta.y);
 
         currentDisplay--;
 
-        _DanmukuPool.Recycle(dm);
+        _DanmukuPool.Recycle(dm);   
     }
 
     static bool init()

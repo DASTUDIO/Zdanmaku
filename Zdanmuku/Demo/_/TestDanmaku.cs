@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TestDanmaku : MonoBehaviour
 {
-    void Start() { StartCoroutine(AddDanmaku()); }
+    void Start() { StartCoroutine(AddDanmaku()); Zdanmaku.Alpha = 0.5f; }
 
     IEnumerator AddDanmaku()
     {
@@ -15,15 +15,19 @@ public class TestDanmaku : MonoBehaviour
         }
     }
 
-    //private void OnGUI()
-    //{
-    //    if (GUI.Button(new Rect(0,0,200,100),"Add a Danmaku"))
-    //    {
-    //        float f = Random.Range(3, 8);
 
-    //        Zdanmaku.Show(GetString(Random.Range(0, 6)), GetColor(Random.Range(0, 6)), Random.Range(0f, 0.99f), Random.Range(30, 70), f);
-    //    }
-    //}
+    bool isPause;
+
+    private void OnGUI()
+    {
+        if (!isPause)
+            if (GUI.Button(new Rect(0, 0, 200, 100), "Pause"))
+            { Zdanmaku.Pause(); isPause = true; }
+
+        if (isPause)
+            if (GUI.Button(new Rect(0, 0, 200, 100), "Continue"))
+            { Zdanmaku.Continue(); isPause = false; }
+    }
 
     string GetString(int i)
     {

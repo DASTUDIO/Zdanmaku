@@ -50,11 +50,9 @@ public class ZdanmakuPanel : EditorWindow
         GUILayout.EndHorizontal();
 
 
-        GUILayout.BeginHorizontal();
-
         handler.direction = (Zdanmaku.Direction)EditorGUILayout.EnumPopup("弹幕方向(Direction)",handler.direction);
 
-        GUILayout.EndHorizontal();
+        handler.alpha = (float)EditorGUILayout.Slider("透明度", handler.alpha, 0, 1);
 
 
         GUILayout.EndVertical();
